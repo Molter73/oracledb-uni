@@ -7,7 +7,10 @@ NUEVO_USUARIO="nuevo_usuario"
 PASSWORD="contrasena_segura"
 TABLE_NAME="nueva_tabla"
 TABLE_COLUMNS="id NUMBER PRIMARY KEY, nombre VARCHAR2(50), cantidad NUMBER"
-BACKUP_FILE="/home/oracle/backup_${TABLE_NAME}.sql"
+BACKUP_FILE="/vagrant/backup/backup_${TABLE_NAME}.sql"
+
+# Carpeta destino
+mkdir -p /vagrant/backup
 
 # Conexión a Oracle XE y creación de usuario, tabla, registros y backup
 sqlplus sys/pass as sysdba << EOF
@@ -33,5 +36,12 @@ INSERT INTO ${TABLE_NAME}(id, nombre, cantidad) VALUES
 INSERT INTO ${TABLE_NAME}(id, nombre, cantidad) VALUES
   (4, 'Lex Luthor', 100000);
 
--- Realizar el backup de la tabla guardando los datos en $BACKUP_FILE echo "Usuario, tabla y registros creados exitosamente. Backup guardado en $BACKUP_FILE."
+-- Realizar el backup de la tabla guardando los datos en $BACKUP_FILE
+SPOOL ${BACKUP_FILE};
+SELECT * FROM ${TABLE_NAME};
+SPOOL OFF;
+
+EXIT;
 EOF
+
+echo "Usuario, tabla y registros creados exitosamente. Backup guardado en $BACKUP_FILE."

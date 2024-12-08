@@ -3,11 +3,11 @@ Vagrant.configure("2") do |config|
   config.vm.box_version = "4.3.12"
 
   config.vm.provider "virtualbox" do |vbox|
-    vbox.gui = true
+    vbox.gui = false
     vbox.cpus = 2
     vbox.memory = 2048
 
-    config.vm.synced_folder __dir__, '/vagrant'
+    config.vm.synced_folder __dir__, '/vagrant', type: 'virtualbox'
   end
 
   config.vm.provider "libvirt" do |v|
